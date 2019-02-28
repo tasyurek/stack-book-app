@@ -2,15 +2,21 @@ const graphql = require("graphql");
 const _ = require("lodash");
 
 let books = [
-  { id: "1", name: "Kuyucakii Yusuf", genre: "Roman" },
-  { id: "2", name: "Yuzbasinin Kizi", genre: "Romantic" },
-  { id: "3", name: "Patasana", genre: "Roman" }
+  { id: "1", name: "Patasana", genre: "Roman", authorId: "2" },
+  { id: "2", name: "Sefiller", genre: "Roman", authorId: "3" },
+  { id: "3", name: "Sirca Kosk", genre: "Story", authorId: "4" },
+  { id: "4", name: "Yuzbasinin Kizi", genre: "Roman", authorId: "5" },
+  { id: "5", name: "Kuyucakii Yusuf", genre: "Roman", authorId: "4" },
+  { id: "6", name: "Insan Ne Ile Yasar?", genre: "Roman", authorId: "1" },
+  { id: "7", name: "Kurk Mantolu Madonna", genre: "Roman", authorId: "4" }
 ];
 
 let authors = [
-  { id: "1", name: "Sebahattin Ali" },
-  { id: "2", name: "Alexsandr Sergeyevic Puskin" },
-  { id: "3", name: "Ahmet Umit" }
+  { id: "1", name: "Tolstoy" },
+  { id: "2", name: "Ahmet Umit" },
+  { id: "3", name: "Victor Hugo" },
+  { id: "4", name: "Sebahattin Ali" },
+  { id: "5", name: "Alexsandr Sergeyevic Puskin" }
 ];
 
 const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID } = graphql;
@@ -20,7 +26,13 @@ const BookType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    genre: { type: GraphQLString }
+    genre: { type: GraphQLString },
+    author: {
+      type: AuthorType,
+      resolve(parent, args) {
+        return _.find(authors, { id: parent.authorId });
+      }
+    }
   })
 });
 
