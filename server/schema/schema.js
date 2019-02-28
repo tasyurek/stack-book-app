@@ -19,7 +19,13 @@ let authors = [
   { id: "5", name: "Alexsandr Sergeyevic Puskin" }
 ];
 
-const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID } = graphql;
+const {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLSchema,
+  GraphQLID,
+  GraphQLList
+} = graphql;
 
 const BookType = new GraphQLObjectType({
   name: "Book",
@@ -40,7 +46,13 @@ const AuthorType = new GraphQLObjectType({
   name: "Author",
   fields: () => ({
     id: { type: GraphQLID },
-    name: { type: GraphQLString }
+    name: { type: GraphQLString },
+    books: {
+      type: GraphQLList(BookType),
+      resolve(parent, args) {
+        return _.filter(books, { authorId: parent.id });
+      }
+    }
   })
 });
 
